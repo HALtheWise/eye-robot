@@ -28,7 +28,7 @@ from getch import getch
 
 def discoverArduino():
 	# This code is taken from http://stackoverflow.com/a/14224477
-	ports = glob.glob('/dev/tty[AU][A-Za-z]*')
+	ports = glob.glob('/dev/tty[AU][CS][A-Za-z]*')
 	print("Discovered ports:", ports)
 	if ports:
 		ser = serial.Serial(ports[0], 115200)
