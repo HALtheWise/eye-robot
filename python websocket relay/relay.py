@@ -51,28 +51,46 @@ def sendArduinoData(ser, forward, turn, pan, tilt):
 
 def keyControl(ser):
 	startTime = time.time()
+
+	forward = turn = pan = tilt = 0
+
 	while True: # time.time() < startTime + 30:
 		command = getch()
 
-		whattodo = {
-		'a':[0,-90],
-		' ':[0, 0]
+		if command == '\x03':
+			# Ctrl-C cancels
+			return
+
+		driveCommands = {
+		'w':[1, 0],
+		's':[-1,0],
+		'a':[0,-1],
+		'd':[0, 1],
+		' ':[0, 0],
 		}
 
-		if command not in whattodo:
-			continue
+		if command in driveCommands:
+			cmd = driveCommands[command]
+			forward = cmd[0]
+			turn = cmd[1]
 
-		forward = 0
-		turn = 0
-		pan = whattodo[command][0]
-		tilt = whattodo[command][1]
+		turnCommands = {
+		'j':[-10, 0],
+		'l':[10,  0],
+		',':[0, -10],
+		'm':[0, -10],
+		'i':[0,  10]
+		}
+
+		if command in turnCommands:
+			cmd = turnCommands[command]
+			pan += cmd[0]
+			tilt += cmd[1]
 
 		sendArduinoData(ser, forward, turn, pan, tilt)
 
 
 ser = discoverArduino()
-
-sendArduinoData(ser, 0, 0, 20, 30)
 
 keyControl(ser)
 
