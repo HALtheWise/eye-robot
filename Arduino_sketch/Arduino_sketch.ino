@@ -2,7 +2,7 @@
 #include <Servo.h>
 const int leftmotorpin = 3;//left motor pin 3 PWM
 const int leftmotordir = 4;// left motor direction on pin 4
-const int liftmotordir2 = 2; //left motor direction 2 on pint 2
+const int leftmotordir2 = 2; //left motor direction 2 on pint 2
 const int rightmotorpin = 5;//right motor on pin 5 PWM
 const int rightmotordir = 6;//right motor on pin 6 PWM
 const int rightmotordir2 = 7;//right motor 2 on pin 6 PWM
@@ -58,26 +58,30 @@ void loop()
 
 void motorcontroller(float fwd, float turn){
   //given a forward speed and turn speed controls motors
-  float leftmotor = fwd + turn
-  float rightmotor = fwd - turn
-  normalizepowers(&leftmotor, &rightmotor, 1.0)
-  if leftmotor <= 0:
+  float leftmotor = fwd + turn;
+  float rightmotor = fwd - turn;
+  normalizePowers(&leftmotor, &rightmotor, 1.0);
+  if (leftmotor <= 0){
     digitalWrite(leftmotordir, HIGH);
     digitalWrite(leftmotordir2, LOW);
     analogWrite(leftmotorpin, leftmotor*255);
-  if leftmotor > 0:
+  }
+  if (leftmotor > 0){
     digitalWrite(leftmotordir, LOW);
     digitalWrite(leftmotordir2, HIGH);
     analogWrite(leftmotorpin, leftmotor*255);
-  if rightmotor <= 0:
+  }
+  if (rightmotor <= 0){
     digitalWrite(rightmotordir, HIGH);
     digitalWrite(rightmotordir2, LOW);
     analogWrite(rightmotorpin, rightmotor*255);
-  if rightmotor > 0:
+  }
+  if (rightmotor > 0){
     digitalWrite(rightmotordir, LOW);
     digitalWrite(rightmotordir2, HIGH);
     analogWrite(rightmotorpin, rightmotor*255);
-  break
+  }
+}
 
 void servocontroller(float panpos, float tiltpos){
   // given a pan and tilt value controls the differential
