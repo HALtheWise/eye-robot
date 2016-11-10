@@ -1,11 +1,16 @@
 <html>
 <head>
-  <title>Simple client</title>
+  <title>Eye-Robot Control</title>
 
   <script type="text/javascript">
+  'use strict'
+
 
     var ws;
     
+    var pan = 0;
+    var tilt = 0;
+
     function init() {
 
       // Connect to Web Socket
@@ -52,15 +57,59 @@
       log.innerHTML = escaped + "<br>" + log.innerHTML;
     }
 
+    function sendMessage(forward, turn, pan, tilt) {
+      var message = [forward, turn, pan, tilt].join(',')
+
+      ws.send(message);
+      output("sent: " + message);
+    }
+
+    function sendDeltaMove(dpan, dtilt) {
+      pan += dpan;
+      tilt += dtilt;
+
+      sendMessage(0, 0, pan, tilt);
+    }
+
+    var increment = 20;
   </script>
 </head>
 <body onload="init();">
-  <form onsubmit="onSubmit(); return false;">
-    <input type="text" id="input">
-    <input type="submit" value="Send">
-    <button onclick="onCloseClick(); return false;">close</button>
-  </form>
-  <div id="log"></div>
-  <img src=":8081">
+  <h1>Eye-robot control interface</h1>
+
+  <div id="viewport" style="position: relative; height: 380; width: 580; margin-left: auto; margin-right: auto;">
+    <div id="leftbutton" 
+    style="position: absolute; left: 0; top: 40; width: 40; height: 300px; background: lightgrey;",
+    onclick="sendDeltaMove(-increment,0);">
+    LEFT
+    </div>
+    <div id="rightbutton" 
+    style="position: absolute; left: 540; top: 40; width: 40; height: 300px; background: lightgrey;",
+    onclick="sendDeltaMove(increment,0);">
+    RIGHT
+    </div>
+    <div id="topbutton" 
+    style="position: absolute; left: 40; top: 0; width: 500; height: 40; background: lightgrey; text-align: center;",
+    onclick="sendDeltaMove(0, increment);">
+    TOP
+    </div>
+    <div id="bottombutton" 
+    style="position: absolute; left: 40; top: 340; width: 500; height: 40; background: lightgrey; text-align: center;",
+    onclick="sendDeltaMove(0, -increment);">
+    TOP
+    </div>
+    <img style="position: absolute; left: 40; top: 40; width:500px; height: 300px" src="http://localhost:8081">
+  </div>
+
+
+  <br> <br>
+  <div style="padding: 10px; background: lightcyan;">
+    <form onsubmit="onSubmit(); return false;">
+      <input type="text" id="input">
+      <input type="submit" value="Send">
+      <button onclick="onCloseClick(); return false;">close</button>
+    </form>
+    <div id="log"></div>
+  </div> 
 </body>
 </html>
