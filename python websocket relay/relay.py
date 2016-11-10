@@ -95,6 +95,7 @@ def message_received(client, server, message):
 
 	if not ser:
 		server.send_message(client, 'Arduino not connected')
+		return
 
 	parts = map(float, message.split(','))
 	if len(parts) == 4:
