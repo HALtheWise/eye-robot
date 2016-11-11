@@ -8,6 +8,7 @@ const int rightmotordir = 5;//right motor on pin 6 PWM
 const int rightmotordir2 = 7;//right motor 2 on pin 6 PWM
 const int leftservopin = 9;//leftservopin on pin 9
 const int rightservopin = 10;//rightservopin on pin 10
+const int panservopin = 11;//panservo on pin 11
 
 const int ledpin = 13;
 
@@ -20,12 +21,14 @@ float tilt = 0;
 
 Servo leftservo;
 Servo rightservo;
+Servo panservo;
 
 void setup()
 {
   Serial.begin(115200);//Begin serial at 115000 baud
   leftservo.attach(9);//attaches left servo to pin 9
   rightservo.attach(10);//attaches right servo to pin 10
+  panservo.attach(11);//attaches pan servo to pin 11
   pinMode(rightmotorpin, OUTPUT);
   pinMode(leftmotorpin, OUTPUT);
   pinMode(rightmotordir, OUTPUT);
@@ -92,14 +95,14 @@ void servocontroller(float panpos, float tiltpos){
   // given a pan and tilt value controls the differential
   int leftpos;
   int rightpos;
-  leftpos = pan - tilt;
-  rightpos = pan + tilt;
-  //converts from -90 to 90 to 0 to 180
-  leftpos += 90;
-  rightpos += 90;
+  //do any math you need to do here
+  panpos = pan;
+  rightpos = tilt;
+  leftpos = -tilt;
   //write values to servos
   leftservo.write(leftpos);
   rightservo.write(rightpos);
+  panservo.write(panpos);
 }  
 
 
