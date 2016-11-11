@@ -18,6 +18,8 @@ def discoverArduino():
 		return ser
 
 def sendArduinoData(ser, forward, turn, pan, tilt):
+	print ('started writing data')
+
 	ser.write(str(forward))
 	ser.write(b',')
 	ser.write(str(turn))
