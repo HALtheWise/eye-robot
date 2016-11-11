@@ -70,7 +70,7 @@ void motorcontroller(float fwd, float turn){
   float leftmotor = fwd + turn;
   float rightmotor = fwd - turn;
   normalizePowers(&leftmotor, &rightmotor, 1.0);
-  if (leftmotor <= 0){
+  if (leftmotor >= 0){
     digitalWrite(leftmotordir, HIGH);
     digitalWrite(leftmotordir2, LOW);
     analogWrite(leftmotorpin, abs(leftmotor*255));
@@ -80,7 +80,7 @@ void motorcontroller(float fwd, float turn){
     analogWrite(leftmotorpin, abs(leftmotor*255));
   }
 
-  if (rightmotor <= 0){
+  if (rightmotor >= 0){
     digitalWrite(rightmotordir, HIGH);
     digitalWrite(rightmotordir2, LOW);
     analogWrite(rightmotorpin, abs(rightmotor*255));
