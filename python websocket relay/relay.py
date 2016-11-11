@@ -99,7 +99,10 @@ def message_received(client, server, message):
 
 	parts = map(float, message.split(','))
 	if len(parts) == 4:
-		sendArduinoData(ser, *parts)
+		try:
+			sendArduinoData(ser, *parts)
+		except Exception as e:
+			print e
 	else:
 		print 'Recieved message has wrong length:', message
 		server.send_message(client, 'Recieved message has wrong length:' + message)
