@@ -13,7 +13,7 @@ def discoverArduino():
 	ports = glob.glob('/dev/tty[AU][CS][A-Za-z]*')
 	print("Discovered ports:", ports)
 	if ports:
-		ser = serial.Serial(ports[0], 115200)
+		ser = serial.Serial(ports[0], 115200, writeTimeout = 0.01)
 		time.sleep(1) # Allow the port to initialize
 		return ser
 
