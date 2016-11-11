@@ -10,6 +10,8 @@
     
     var pan = 0;
     var tilt = 0;
+    var drive = 0;
+    var turn = 0;
 
     function init() {
 
@@ -67,11 +69,46 @@
     function sendDeltaMove(dpan, dtilt) {
       pan += dpan;
       tilt += dtilt;
-
-      sendMessage(0, 0, pan, tilt);
     }
 
-    var increment = 20;
+    function sendCommand() {
+      sendMessage(drive, turn, pan, tilt);
+    }
+
+    window.setInterval(sendCommand, .1);
+
+    document.onkeyup = function() {drive = turn = 0;}
+
+    document.onkeydown = function(evt) {
+        evt = evt || window.event;
+        var charCode = evt.keyCode || evt.which;
+        var charStr = String.fromCharCode(charCode);
+
+      console.log('pressed', charStr)
+        if (charStr == 'W') {
+          drive = drivePower;
+        } else if (charStr == 'S') {
+          drive = -drivePower;
+        } else if (charStr == 'A') {
+          turn = -drivePower;
+        } else if (charStr == 'D') {
+          turn = drivePower;
+        } else if (charStr == 'I') {
+          tilt += increment;
+        } else if (charStr == 'K') {
+          tilt -= increment;
+        } else if (charStr == 'J') {
+          pan -= increment;
+        } else if (charStr == 'L') {
+          pan += increment;
+        }
+    };
+
+
+    var increment = 10;
+
+    var drivePower = 1.0;
+
   </script>
 </head>
 <body onload="init();">
@@ -103,7 +140,7 @@
 
 
   <br> <br>
-  <div style="padding: 10px; background: lightcyan;">
+  <div style="margin-left:auto; margin-right:auto; padding: 10px; background: lightcyan; width:400px">
     <form onsubmit="onSubmit(); return false;">
       <input type="text" id="input">
       <input type="submit" value="Send">
