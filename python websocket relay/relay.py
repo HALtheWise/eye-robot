@@ -27,6 +27,7 @@ def sendArduinoData(ser, forward, turn, pan, tilt):
 	ser.write(str(tilt))
 	ser.write(b'\n')
 
+	print('wrote out data')
 	ser.flush()
 
 	print('Sent data: ({}, {}, {}, {})'.format(forward, turn, pan, tilt))
