@@ -44,7 +44,7 @@ void loop()
   //if there's any serial avaliable , read it
 
   digitalWrite(ledpin, LOW);
-  while(Serial.available() > 1){
+  if(Serial.available() > 1){
     digitalWrite(ledpin, HIGH);
     //look for each valid float in the serial stream
     fwdspeed = Serial.parseFloat();
@@ -62,7 +62,7 @@ void loop()
   while (Serial.available()>0){
     Serial.read();
   }
-  delay(10);
+  delay(50);
 }
 
 void motorcontroller(float fwd, float turn){
