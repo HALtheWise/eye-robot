@@ -76,9 +76,12 @@
       sendMessage(drive, turn, pan, tilt);
     }
 
-    window.setInterval(sendCommand, .1);
+    // window.setInterval(sendCommand, .1);
 
-    document.onkeyup = function() {drive = turn = 0;}
+    document.onkeyup = function() {
+      drive = turn = 0;
+      sendCommand();
+    }
 
     document.onkeydown = function(evt) {
         evt = evt || window.event;
@@ -103,6 +106,8 @@
         } else if (charStr == 'L') {
           pan += increment;
         }
+
+        sendCommand();
     };
 
 
