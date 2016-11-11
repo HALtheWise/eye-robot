@@ -1,13 +1,15 @@
 //Reads Serial and controls Eye-Robot
 #include <Servo.h>
-const int leftmotorpin = 3;//left motor pin 3 PWM
-const int leftmotordir = 4;// left motor direction on pin 4
-const int leftmotordir2 = 2; //left motor direction 2 on pint 2
+const int leftmotorpin = 9;//left motor pin 3 PWM
+const int leftmotordir = 2;// left motor direction on pin 4
+const int leftmotordir2 = 3; //left motor direction 2 on pint 2
 const int rightmotorpin = 5;//right motor on pin 5 PWM
 const int rightmotordir = 6;//right motor on pin 6 PWM
 const int rightmotordir2 = 7;//right motor 2 on pin 6 PWM
 const int leftservopin = 9;//leftservopin on pin 9
 const int rightservopin = 10;//rightservopin on pin 10
+
+const int ledpin = 13;
 
 
 
@@ -30,14 +32,17 @@ void setup()
   pinMode(leftmotordir, OUTPUT);
   pinMode(rightmotordir2, OUTPUT);
   pinMode(leftmotordir2, OUTPUT);
-  
+  pinMode(ledpin, OUTPUT);
 }
 
 void loop()
 {
   
   //if there's any serial avaliable , read it
+
+  digitalWrite(ledpin, LOW);
   while(Serial.available() > 1){
+    digitalWrite(ledpin, HIGH);
     //look for each valid float in the serial stream
     fwdspeed = Serial.parseFloat();
     turnspeed = Serial.parseFloat();
@@ -48,6 +53,7 @@ void loop()
   if(Serial.read() == '\n') {  
     motorcontroller(fwdspeed,turnspeed);
     servocontroller(pan, tilt);
+    Serial.println("Recieved values");
   }
   //Clear the serial buffer
   while (Serial.available()>0){
