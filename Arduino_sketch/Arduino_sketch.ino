@@ -96,9 +96,11 @@ void servocontroller(float panpos, float tiltpos){
   int leftpos;
   int rightpos;
   //do any math you need to do here
-  panpos = pan;
-  rightpos = tilt;
-  leftpos = -tilt;
+  tilt = constrain(tilt, -30, 30);
+
+  panpos = -pan + 75;
+  rightpos = -tilt + 90;
+  leftpos = tilt + 90;
   //write values to servos
   leftservo.write(leftpos);
   rightservo.write(rightpos);
