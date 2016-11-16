@@ -14,7 +14,7 @@ def discoverArduino():
 	print("Discovered ports:", ports)
 	if ports:
 		ser = serial.Serial(ports[0], 115200, writeTimeout = 0.1)
-		time.sleep(1) # Allow the port to initialize
+		time.sleep(.2) # Allow the port to initialize
 		return ser
 
 def sendArduinoData(ser, forward, turn, pan, tilt):
@@ -101,7 +101,7 @@ def message_received(client, server, message):
 		server.send_message(client, 'Arduino not connected')
 		print "Arduino reconnecting"
 		ser = discoverArduino()
-		return
+		# return
 
 	parts = map(float, message.split(','))
 	if len(parts) == 4:
