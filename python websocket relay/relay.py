@@ -75,7 +75,7 @@ def keyControl(ser):
 		sendArduinoData(ser, forward, turn, pan, tilt)
 
 
-ser = discoverArduino()
+ser = None
 
 # keyControl(ser)
 
@@ -98,6 +98,8 @@ def message_received(client, server, message):
 
 	if not ser:
 		server.send_message(client, 'Arduino not connected')
+		print "Arduino reconnecting"
+		ser = discoverArduino()
 		return
 
 	parts = map(float, message.split(','))
@@ -105,6 +107,8 @@ def message_received(client, server, message):
 		try:
 			sendArduinoData(ser, *parts)
 		except Exception as e:
+			ser.close()
+			ser = None
 			print e
 	else:
 		print 'Recieved message has wrong length:', message
