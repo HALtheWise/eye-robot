@@ -70,7 +70,7 @@ void handleIncommingSerial(){
     
     delay(5);
 
-    float data[4];
+    float data[4] = {0,0,0,0};
 
     Serial.setTimeout(20); // Timeout on parseFloat() or read() after 20ms
 
