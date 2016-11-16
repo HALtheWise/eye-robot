@@ -48,7 +48,7 @@ void loop()
   
   //if there's any serial avaliable , read it
 
-  delay(50);
+  //delay(50);
 
   handleIncommingSerial();
 
