@@ -85,6 +85,13 @@
       }
       sendMessage(drive, turn, pan, tilt);
     }
+	  
+	function sendCommand() {
+      var tiltLimit = 30;
+
+      tilt = cap(tiltLimit, tilt);
+      sendMessage(drive, turn, pan, tilt);
+    }
 
     // window.setInterval(sendCommand, .1);
 
@@ -92,6 +99,13 @@
       drive = turn = 0;
       sendCommand();
     }
+	
+	function cap(lim, val) {
+	  if (Math.abs(parseInt(val)) > lim) {
+        val = lim * Math.sign(val);
+      }
+	  return val;
+	}
 
     document.onkeydown = function(evt) {
         evt = evt || window.event;
