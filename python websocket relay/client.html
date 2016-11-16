@@ -7,7 +7,7 @@
 
 
     var ws;
-    
+
     var pan = 0;
     var tilt = 0;
     var drive = 0;
@@ -22,12 +22,12 @@
       ws.onopen = function() {
         output("onopen");
       };
-      
+
       ws.onmessage = function(e) {
         // e.data contains received string.
         output("onmessage: " + e.data);
       };
-      
+
       ws.onclose = function() {
         output("onclose");
       };
@@ -38,7 +38,7 @@
       };
 
     }
-    
+
     function onSubmit() {
       var input = document.getElementById("input");
       // You can send message to the Web Socket using ws.send.
@@ -47,11 +47,11 @@
       input.value = "";
       input.focus();
     }
-    
+
     function onCloseClick() {
       ws.close();
     }
-    
+
     var logdata = []
     function output(str) {
       var log = document.getElementById("log");
@@ -65,6 +65,11 @@
     }
 
     function sendMessage(forward, turn, pan, tilt) {
+      var tiltLimit = 30;
+
+      if (abs(parseInt(tilt)) > tiltLimit) {
+        tilt = tiltLimit;
+      }
       var message = [forward, turn, pan, tilt].join(',')
 
       ws.send(message);
@@ -125,22 +130,22 @@
   <h1>Eye-robot control interface</h1>
 
   <div id="viewport" style="position: relative; height: 380; width: 580; margin-left: auto; margin-right: auto;">
-    <div id="leftbutton" 
+    <div id="leftbutton"
     style="position: absolute; left: 0; top: 40; width: 40; height: 300px; background: lightgrey;",
     onclick="sendDeltaMove(-increment,0);">
     LEFT
     </div>
-    <div id="rightbutton" 
+    <div id="rightbutton"
     style="position: absolute; left: 540; top: 40; width: 40; height: 300px; background: lightgrey;",
     onclick="sendDeltaMove(increment,0);">
     RIGHT
     </div>
-    <div id="topbutton" 
+    <div id="topbutton"
     style="position: absolute; left: 40; top: 0; width: 500; height: 40; background: lightgrey; text-align: center;",
     onclick="sendDeltaMove(0, increment);">
     TOP
     </div>
-    <div id="bottombutton" 
+    <div id="bottombutton"
     style="position: absolute; left: 40; top: 340; width: 500; height: 40; background: lightgrey; text-align: center;",
     onclick="sendDeltaMove(0, -increment);">
     TOP
@@ -157,6 +162,6 @@
       <button onclick="onCloseClick(); return false;">close</button>
     </form>
     <div id="log"></div>
-  </div> 
+  </div>
 </body>
 </html>
