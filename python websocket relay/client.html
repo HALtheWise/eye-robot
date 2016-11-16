@@ -60,7 +60,7 @@
       //log.innerHTML = escaped + "<br>" + log.innerHTML;
 
       logdata.push(escaped)
-      logdata = logdata.slice(0,10)
+      logdata = logdata.slice(-10)
       log.innerText = logdata.join('\n');
     }
 
