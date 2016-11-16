@@ -22,6 +22,7 @@
       // Set event handlers.
       ws.onopen = function() {
         output("onopen");
+	sendMessage(0,0,0,0);
       };
 
       ws.onmessage = function(e) {
@@ -37,8 +38,6 @@
         output("onerror");
         console.log(e)
       };
-		
-	  sendMessage(0,0,0,0);
 
     }
 
