@@ -95,6 +95,7 @@ def message_received(client, server, message):
 	# if len(message) > 200:
 	# 	message = message[:200]+'..'
 	print("Client(%d) said: %s" % (client['id'], message))
+	global ser
 
 	if not ser:
 		server.send_message(client, 'Arduino not connected')
