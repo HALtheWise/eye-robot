@@ -65,11 +65,7 @@
     }
 
     function sendMessage(forward, turn, pan, tilt) {
-      var tiltLimit = 30;
 
-      if (abs(parseInt(tilt)) > tiltLimit) {
-        tilt = tiltLimit;
-      }
       var message = [forward, turn, pan, tilt].join(',')
 
       ws.send(message);
@@ -82,6 +78,11 @@
     }
 
     function sendCommand() {
+      var tiltLimit = 30;
+
+      if (Math.abs(parseInt(tilt)) > tiltLimit) {
+        tilt = tiltLimit * Math.sign(tilt);
+      }
       sendMessage(drive, turn, pan, tilt);
     }
 
