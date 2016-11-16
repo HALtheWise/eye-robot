@@ -19,22 +19,27 @@ float turnspeed = 0;
 float pan = 0;
 float tilt = 0;
 
+bool hasNewData = false;
+
 Servo leftservo;
 Servo rightservo;
 Servo panservo;
 
 void setup()
 {
-  Serial.begin(115200);//Begin serial at 115000 baud
+  Serial.begin(115200);//Begin serial at 115200 baud
   leftservo.attach(9);//attaches left servo to pin 9
   rightservo.attach(10);//attaches right servo to pin 10
   panservo.attach(11);//attaches pan servo to pin 11
+
   pinMode(rightmotorpin, OUTPUT);
   pinMode(leftmotorpin, OUTPUT);
   pinMode(rightmotordir, OUTPUT);
+
   pinMode(leftmotordir, OUTPUT);
   pinMode(rightmotordir2, OUTPUT);
   pinMode(leftmotordir2, OUTPUT);
+
   pinMode(ledpin, OUTPUT);
 }
 
@@ -43,26 +48,65 @@ void loop()
   
   //if there's any serial avaliable , read it
 
-  digitalWrite(ledpin, LOW);
-  if(Serial.available() > 1){
-    digitalWrite(ledpin, HIGH);
-    //look for each valid float in the serial stream
-    fwdspeed = Serial.parseFloat();
-    turnspeed = Serial.parseFloat();
-    pan = Serial.parseFloat();
-    tilt = Serial.parseFloat();
-  }
-  //on newline, control hardware
-  if(Serial.read() == '\n') {  
-    motorcontroller(fwdspeed,turnspeed);
-    servocontroller(pan, tilt);
-    Serial.println("Recieved values");
-  }
-  //Clear the serial buffer
-  while (Serial.available()>0){
-    Serial.read();
-  }
   delay(50);
+
+  handleIncommingSerial();
+
+  if(hasNewData){
+    motorcontroller(fwdspeed, turnspeed);
+    servocontroller(pan, tilt);
+    hasNewData = false;
+  }
+}
+
+/*
+This function is responsible for reading from the serial port and parsing the resulting
+data. 
+
+*/
+void handleIncommingSerial(){
+  
+  if(Serial.available() > 0){
+    
+    delay(5);
+
+    float data[4];
+
+    Serial.setTimeout(20); // Timeout on parseFloat() or read() after 20ms
+
+
+    // Attempt to read four floating point values from the serial stream
+    for(int i=0; i<4; i++){
+
+        data[i] = Serial.parseFloat();
+
+        if(Serial.peek() == ','){
+          Serial.read();
+        } else {
+          break;
+        }
+    }
+
+    //If we recieved a newline, export the new data for reading later
+    if(Serial.read() == '\n') {  
+      Serial.println("Recieved values");
+
+      fwdspeed    = data[0];
+      turnspeed   = data[1];
+      pan         = data[2];
+      tilt        = data[3];
+
+      hasNewData = true;
+    } else {
+      Serial.println("Bad message read");
+    }
+
+    //Clear the serial buffer
+    while (Serial.available()>0){
+      Serial.read();
+    }
+
+  }
 }
 
 void motorcontroller(float fwd, float turn){
