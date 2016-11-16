@@ -22,6 +22,10 @@
       // Set event handlers.
       ws.onopen = function() {
         output("onopen");
+	pan = 0;
+	tilt = 0;
+	drive = 0;
+	turn = 0;
 	sendMessage(0,0,0,0);
       };
 
@@ -78,19 +82,11 @@
       pan += dpan;
       tilt += dtilt;
     }
-
+	  
     function sendCommand() {
       var tiltLimit = 30;
-
-      if (Math.abs(parseInt(tilt)) > tiltLimit) {
-        tilt = tiltLimit * Math.sign(tilt);
-      }
-      sendMessage(drive, turn, pan, tilt);
-    }
-	  
-	function sendCommand() {
-      var tiltLimit = 30;
-
+      var panLimit = 80;
+      pan = cap(panLimit, pan);
       tilt = cap(tiltLimit, tilt);
       sendMessage(drive, turn, pan, tilt);
     }
