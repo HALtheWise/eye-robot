@@ -52,12 +52,16 @@
       ws.close();
     }
     
+    var logdata = []
     function output(str) {
       var log = document.getElementById("log");
       var escaped = str.replace(/&/, "&amp;").replace(/</, "&lt;").
         replace(/>/, "&gt;").replace(/"/, "&quot;"); // "
       //log.innerHTML = escaped + "<br>" + log.innerHTML;
-      log.innerHTML = escaped;
+
+      logdata.push(escaped)
+      logdata = logdata.slice(0,10)
+      log.innerText = logdata.join('\n');
     }
 
     function sendMessage(forward, turn, pan, tilt) {
