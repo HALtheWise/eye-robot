@@ -25,12 +25,13 @@
 
       // Set event handlers.
       ws.onopen = function() {
+        testVideo();
         output("onopen");
-	pan = 0;
-	tilt = 0;
-	drive = 0;
-	turn = 0;
-	sendMessage(0,0,0,0);
+        pan = 0;
+        tilt = 0;
+        drive = 0;
+        turn = 0;
+        sendMessage(0,0,0,0);
       };
 
       ws.onmessage = function(e) {
@@ -60,6 +61,16 @@
 
     function onCloseClick() {
       ws.close();
+    }
+    
+    function testVideo() {
+      var tester=new Image();
+      tester.onerror=videoNotFound;
+      tester.src='/video/'
+    }
+    
+    function videoNotFound() {
+      alert('The video stream had an error loading. Please contact eric.miller@students.olin.edu to report the issue.');
     }
 
     var logdata = []
