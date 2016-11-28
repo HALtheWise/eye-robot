@@ -13,6 +13,9 @@
     var tilt = 0;
     var drive = 0;
     var turn = 0;
+    
+    var oldPan = 0;
+    var oldTilt = 0;
 	  
     function init() {
 
@@ -73,11 +76,16 @@
 
     function sendMessage(forward, turn, pan, tilt) {
 
+      if ((oldPan != pan) || (oldTilt != tilt)) {
+        
+        var message = [forward, turn, pan, tilt].join(',')
 
-      var message = [forward, turn, pan, tilt].join(',')
-
-      ws.send(message);
-      output("sent: " + message);
+        ws.send(message);
+        output("sent: " + message);
+      }
+      
+      oldPan = pan;
+      oldTilt = tilt;
 
     }
 	  
