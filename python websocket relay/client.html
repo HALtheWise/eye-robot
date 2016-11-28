@@ -12,7 +12,7 @@
     var tilt = 0;
     var drive = 0;
     var turn = 0;
-
+	  
     function init() {
 
       // Connect to Web Socket
@@ -72,10 +72,12 @@
 
     function sendMessage(forward, turn, pan, tilt) {
 
+
       var message = [forward, turn, pan, tilt].join(',')
 
       ws.send(message);
       output("sent: " + message);
+
     }
 
     function sendDeltaMove(dpan, dtilt) {
@@ -105,11 +107,12 @@
 	  return val;
 	}
 
-    document.onkeydown = function(evt) {
+    document.onkeyup = function(evt) {
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
 
+      var importantButtonPressed = 1;
       console.log('pressed', charStr)
         if (charStr == 'W') {
           drive = drivePower;
@@ -127,9 +130,14 @@
           pan -= increment;
         } else if (charStr == 'L') {
           pan += increment;
+        } else {
+          importantButtonPressed = 0;
         }
-
-        sendCommand();
+      
+        if(importantButtonPressed) {
+          
+          sendCommand();
+        }
     };
 
 
