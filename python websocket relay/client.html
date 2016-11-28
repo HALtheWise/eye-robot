@@ -79,11 +79,6 @@
       output("sent: " + message);
 
     }
-
-    function sendDeltaMove(dpan, dtilt) {
-      pan += dpan;
-      tilt += dtilt;
-    }
 	  
     function sendCommand() {
       var tiltLimit = 30;
@@ -107,7 +102,7 @@
 	  return val;
 	}
 
-    document.onkeyup = function(evt) {
+    document.onkeyup= function(evt) {
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
@@ -148,30 +143,10 @@
   </script>
 </head>
 <body onload="init();">
-  <h1>Eye-robot control interface</h1>
+  <h1 style= "text-align: center; font-family: 'DejaVu Sans Mono', 'Courier New', 'serif';">Eye-Robot Control Station</h1>
 
-  <div id="viewport" style="position: relative; height: 380; width: 580; margin-left: auto; margin-right: auto;">
-    <div id="leftbutton"
-    style="position: absolute; left: 0; top: 40; width: 40; height: 300px; background: lightgrey;",
-    onclick="sendDeltaMove(-increment,0);">
-    LEFT
-    </div>
-    <div id="rightbutton"
-    style="position: absolute; left: 540; top: 40; width: 40; height: 300px; background: lightgrey;",
-    onclick="sendDeltaMove(increment,0);">
-    RIGHT
-    </div>
-    <div id="topbutton"
-    style="position: absolute; left: 40; top: 0; width: 500; height: 40; background: lightgrey; text-align: center;",
-    onclick="sendDeltaMove(0, increment);">
-    TOP
-    </div>
-    <div id="bottombutton"
-    style="position: absolute; left: 40; top: 340; width: 500; height: 40; background: lightgrey; text-align: center;",
-    onclick="sendDeltaMove(0, -increment);">
-    TOP
-    </div>
-    <img style="position: absolute; left: 40; top: 40; width:500px; height: 300px" src="/video/">
+  
+    <img style= "display: block; width:80%; height: 48%; margin: auto;" src="/video/">
   </div>
 
 
