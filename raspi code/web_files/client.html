@@ -16,11 +16,16 @@
     
     var oldPan = 0;
     var oldTilt = 0;
+
+function createWebSocket(path) {
+    var protocolPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+    return new WebSocket(protocolPrefix + '//' + location.host + path);
+}
 	  
     function init() {
 
       // Connect to Web Socket
-      ws = new WebSocket("ws://localhost:9001/");
+      ws = new createWebSocket('/websocket/');
 		
 
       // Set event handlers.
