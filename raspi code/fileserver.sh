@@ -1,4 +1,4 @@
 #! /bin/bash
 
-cd web\ files
+cd web_files
 python -m SimpleHTTPServer 8085
