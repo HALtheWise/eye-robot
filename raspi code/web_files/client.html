@@ -26,6 +26,12 @@
       // Set event handlers.
       ws.onopen = function() {
         testVideo();
+        if (hasGetUserMedia()) {
+          alert('We have microphone access!')
+        }
+        else {
+          alert('We have no microphone access!')
+        }
         output("onopen");
         pan = 0;
         tilt = 0;
@@ -154,6 +160,11 @@
           sendCommand();
         }
     };
+    
+    function hasGetUserMedia() {
+      return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    } 
 
 
     var increment = 10;
