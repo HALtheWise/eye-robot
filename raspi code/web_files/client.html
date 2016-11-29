@@ -3,6 +3,7 @@
   <link rel="stylesheet" type="text/css" href="styles.css" media="screen" />
   <title>Eye-Robot Control</title>
 
+  <script src="https://cdn.binaryjs.com/0/binary.js"></script>
   <script type="text/javascript">
   'use strict'
 
@@ -18,20 +19,27 @@
     var oldTilt = 0;
 	  
     function init() {
-
+        testVideo();
+        if (hasGetUserMedia()) {
+          alert('We have microphone access!');
+          Console.log('We have microphone access!');
+        }
+        else {
+          alert('We have no microphone access!');
+          Console.log('We have microphone access!');
+        }
+        navigator.getUserMedia(session, intializeRecorder, onError);
+        var client = new BinaryClient('ws://localhost:9001');
+        client.on('open', function() {
+          window.Stream = client.createStream();
+        }
       // Connect to Web Socket
       ws = new WebSocket("ws://localhost:9001/");
 		
 
       // Set event handlers.
       ws.onopen = function() {
-        testVideo();
-        if (hasGetUserMedia()) {
-          alert('We have microphone access!')
-        }
-        else {
-          alert('We have no microphone access!')
-        }
+
         output("onopen");
         pan = 0;
         tilt = 0;
@@ -54,6 +62,36 @@
         console.log(e)
       };
 
+    }
+    
+    function initializeRecorder(stream) {
+      var audioContext = window.AudioContext;
+      var context = new audioContext();
+      var audioInput = context.createMediaStreamSource(stream);
+      var bufferSize = 2048;
+      // Create a javascript node
+      var recorder = context.createJavaScriptNode(bufferSize, 1,1);
+      //specify the processing function
+      reorder.onaudioprocess = recorderProcess;
+      // connect stream to our recorder
+      audioInput.connect(recorder);
+      // connect our recorder to the previous destination
+      recorder.connect(context.destination);
+      
+    }
+    
+    function recorderProcess(e) {
+      var left = e.inputBuffer.getChannelData(0);
+      window.Stream.write(convertFloat32ToInt16(left));
+    }
+    
+    function convertFloat32ToInt16(buffer) {
+      l = buffer.length;
+      buf = new Int16Array(l);
+      while (l--) {
+        buf[l] = Math.min(1, buffer[l])*0x7FFF;
+      }
+      return buf.buffer;
     }
 
     function onSubmit() {
