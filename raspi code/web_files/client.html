@@ -25,19 +25,19 @@ function createWebSocket(path) {
 	  
     function init() {
         testVideo();
-        if (hasGetUserMedia()) {
-          alert('We have microphone access!');
-          console.log('We have microphone access!');
-        }
-        else {
-          alert('We have no microphone access!');
-          console.log('We have no microphone access!');
-        }
-        navigator.getUserMedia(session, intializeRecorder, onError);
-        var client = new BinaryClient('ws://localhost:9001');
-        client.on('open', function() {
-          window.Stream = client.createStream();
-        });
+        // if (hasGetUserMedia()) {
+        //   alert('We have microphone access!');
+        //   console.log('We have microphone access!');
+        // }
+        // else {
+        //   alert('We have no microphone access!');
+        //   console.log('We have no microphone access!');
+        // }
+        // navigator.getUserMedia(session, intializeRecorder, onError);
+        // var client = new BinaryClient('ws://localhost:9001');
+        // client.on('open', function() {
+        //   window.Stream = client.createStream();
+        // });
 
       // Connect to Web Socket
       ws = new createWebSocket('/websocket/');
