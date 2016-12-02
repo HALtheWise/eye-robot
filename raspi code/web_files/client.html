@@ -37,7 +37,8 @@ function createWebSocket(path) {
         var client = new BinaryClient('ws://localhost:9001');
         client.on('open', function() {
           window.Stream = client.createStream();
-        }
+        });
+
       // Connect to Web Socket
       ws = new createWebSocket('/websocket/');
 		
