@@ -27,11 +27,11 @@ function createWebSocket(path) {
         testVideo();
         if (hasGetUserMedia()) {
           alert('We have microphone access!');
-          Console.log('We have microphone access!');
+          console.log('We have microphone access!');
         }
         else {
           alert('We have no microphone access!');
-          Console.log('We have microphone access!');
+          console.log('We have no microphone access!');
         }
         navigator.getUserMedia(session, intializeRecorder, onError);
         var client = new BinaryClient('ws://localhost:9001');
