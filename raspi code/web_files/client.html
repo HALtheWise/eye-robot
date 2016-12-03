@@ -15,13 +15,12 @@
     var drive = 0;
     var turn = 0;
     
-    var oldPan = 0;
-    var oldTilt = 0;
+    var pressedkeys = {}; // Stores the key code of currently pressed keys
 
-function createWebSocket(path) {
-    var protocolPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
-    return new WebSocket(protocolPrefix + '//' + location.host + path);
-}
+    function createWebSocket(path) {
+        var protocolPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+        return new WebSocket(protocolPrefix + '//' + location.host + path);
+    }
     
     function init() {
         testVideo();
@@ -147,19 +146,12 @@ function createWebSocket(path) {
     }
     
     function sendCommand() {
-      console.log('Sending command');
       var tiltLimit = 30;
       var panLimit = 80;
       pan = cap(panLimit, pan);
       tilt = cap(tiltLimit, tilt);
       sendMessage(drive, turn, pan, tilt);
     }
-
-    document.onkeyup = function() {
-      drive = turn = 0;
-      sendCommand();
-    }
-  
     function cap(lim, val) {
       if (Math.abs(parseInt(val)) > lim) {
           val = lim * Math.sign(val);
@@ -167,36 +159,60 @@ function createWebSocket(path) {
       return val;
     }
 
-    document.onkeydown= function(evt) {
-        evt = evt || window.event;
-        var charCode = evt.keyCode || evt.which;
-        var charStr = String.fromCharCode(charCode);
+    document.onkeyup = function(evt) {
+      evt = evt || window.event;
+      var charCode = evt.keyCode || evt.which;
+      var charStr = String.fromCharCode(charCode);
 
-        var importantButtonPressed = true;
-        console.log('pressed', charCode, charStr);
-        if (charStr == 'W') {
-          drive = drivePower;
-        } else if (charStr == 'S') {
-          drive = -drivePower;
-        } else if (charStr == 'A') {
-          turn = -drivePower;
-        } else if (charStr == 'D') {
-          turn = drivePower;
-        } else if (charStr == 'I') {
-          tilt += increment;
-        } else if (charStr == 'K') {
-          tilt -= increment;
-        } else if (charStr == 'J') {
-          pan -= increment;
-        } else if (charStr == 'L') {
-          pan += increment;
-        } else {
-          importantButtonPressed = false;
-        }
+      delete pressedkeys[charCode]
       
-        if(importantButtonPressed) {
-          sendCommand();
-        }
+      if (charStr == 'W' || charStr == 'S') {
+        drive = 0;
+        sendCommand();
+      }
+      if (charStr == 'A' || charStr == 'D') {
+        turn = 0;
+        sendCommand();
+      }
+    }
+
+    document.onkeydown= function(evt) {
+      evt = evt || window.event;
+      var charCode = evt.keyCode || evt.which;
+      var charStr = String.fromCharCode(charCode);
+
+      if (charCode in pressedkeys){
+        // This key was already pressed
+        return;
+      }
+
+      pressedkeys[charCode] = true;
+
+      var importantButtonPressed = true;
+      console.log('pressed', charCode, charStr);
+      if (charStr == 'W') {
+        drive = drivePower;
+      } else if (charStr == 'S') {
+        drive = -drivePower;
+      } else if (charStr == 'A') {
+        turn = -drivePower;
+      } else if (charStr == 'D') {
+        turn = drivePower;
+      } else if (charStr == 'I') {
+        tilt += increment;
+      } else if (charStr == 'K') {
+        tilt -= increment;
+      } else if (charStr == 'J') {
+        pan -= increment;
+      } else if (charStr == 'L') {
+        pan += increment;
+      } else {
+        importantButtonPressed = false;
+      }
+    
+      if(importantButtonPressed) {
+        sendCommand();
+      }
     };
     
     function hasGetUserMedia() {
