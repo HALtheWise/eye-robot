@@ -151,6 +151,7 @@ function createWebSocket(path) {
     }
     
     function sendCommand() {
+      console.log('Sending command');
       var tiltLimit = 30;
       var panLimit = 80;
       pan = cap(panLimit, pan);
@@ -171,7 +172,7 @@ function createWebSocket(path) {
       return val;
     }
 
-    document.onkeyup= function(evt) {
+    document.onkeydown= function(evt) {
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
