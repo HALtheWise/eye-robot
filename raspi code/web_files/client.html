@@ -153,7 +153,7 @@ function createWebSocket(path) {
       sendMessage(drive, turn, pan, tilt);
     }
 
-    window.setInterval(sendCommand, .5);
+    window.setInterval(sendCommand, 500);
 
     document.onkeyup = function() {
       drive = turn = 0;
