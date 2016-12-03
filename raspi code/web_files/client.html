@@ -137,17 +137,11 @@ function createWebSocket(path) {
 
     function sendMessage(forward, turn, pan, tilt) {
 
-      if ((oldPan != pan) || (oldTilt != tilt)) {
-        
-        var message = [forward, turn, pan, tilt].join(',')
+      var message = [forward, turn, pan, tilt].join(',')
 
-        ws.send(message);
-        output("sent: " + message);
-      }
+      ws.send(message);
+      output("sent: " + message);
       
-      oldPan = pan;
-      oldTilt = tilt;
-
     }
     
     function sendCommand() {
@@ -159,10 +153,11 @@ function createWebSocket(path) {
       sendMessage(drive, turn, pan, tilt);
     }
 
-    window.setInterval(sendCommand, .1);
+    window.setInterval(sendCommand, .5);
 
     document.onkeyup = function() {
       drive = turn = 0;
+      sendCommand();
     }
   
     function cap(lim, val) {
