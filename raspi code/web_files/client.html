@@ -52,6 +52,8 @@ function createWebSocket(path) {
         drive = 0;
         turn = 0;
         sendMessage(0,0,0,0);
+
+        window.setInterval(sendCommand, 500);
       };
 
       ws.onmessage = function(e) {
@@ -152,8 +154,6 @@ function createWebSocket(path) {
       tilt = cap(tiltLimit, tilt);
       sendMessage(drive, turn, pan, tilt);
     }
-
-    window.setInterval(sendCommand, 500);
 
     document.onkeyup = function() {
       drive = turn = 0;
