@@ -22,7 +22,7 @@ function createWebSocket(path) {
     var protocolPrefix = (window.location.protocol === 'https:') ? 'wss:' : 'ws:';
     return new WebSocket(protocolPrefix + '//' + location.host + path);
 }
-	  
+    
     function init() {
         testVideo();
         // if (hasGetUserMedia()) {
@@ -41,7 +41,7 @@ function createWebSocket(path) {
 
       // Connect to Web Socket
       ws = new createWebSocket('/websocket/');
-		
+    
 
       // Set event handlers.
       ws.onopen = function() {
@@ -149,7 +149,7 @@ function createWebSocket(path) {
       oldTilt = tilt;
 
     }
-	  
+    
     function sendCommand() {
       var tiltLimit = 30;
       var panLimit = 80;
@@ -158,27 +158,26 @@ function createWebSocket(path) {
       sendMessage(drive, turn, pan, tilt);
     }
 
-    // window.setInterval(sendCommand, .1);
+    window.setInterval(sendCommand, .1);
 
     document.onkeyup = function() {
       drive = turn = 0;
-      sendCommand();
     }
-	
-	function cap(lim, val) {
-	  if (Math.abs(parseInt(val)) > lim) {
-        val = lim * Math.sign(val);
-      }
-	  return val;
-	}
+  
+    function cap(lim, val) {
+      if (Math.abs(parseInt(val)) > lim) {
+          val = lim * Math.sign(val);
+        }
+      return val;
+    }
 
     document.onkeyup= function(evt) {
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
         var charStr = String.fromCharCode(charCode);
 
-      var importantButtonPressed = 1;
-      console.log('pressed', charStr)
+        var importantButtonPressed = true;
+        console.log('pressed', charCode, charStr);
         if (charStr == 'W') {
           drive = drivePower;
         } else if (charStr == 'S') {
@@ -196,11 +195,10 @@ function createWebSocket(path) {
         } else if (charStr == 'L') {
           pan += increment;
         } else {
-          importantButtonPressed = 0;
+          importantButtonPressed = false;
         }
       
         if(importantButtonPressed) {
-          
           sendCommand();
         }
     };
